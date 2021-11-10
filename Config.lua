@@ -1,5 +1,7 @@
 Config = {}
 
+Config.ServerName = "Last Town V2"
+
 Config.DefaultSexe = 1
 
 Config.MotherList = { "Hannah", "Aubrey", "Jasmine", "Gisele", "Amelia", "Isabella", "Zoe", "Ava", "Camila", "Violet", "Sophia", "Evelyn", "Nicole", "Ashley", "Gracie", "Brianna", "Natalie", "Olivia", "Elizabeth", "Charlotte", "Emma" }
