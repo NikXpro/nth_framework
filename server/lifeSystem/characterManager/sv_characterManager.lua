@@ -48,22 +48,28 @@ AddEventHandler('nth:createCharacter', function(playerData)
     })
 end)
 
-function getUserCreated(src_, loop)
-    MySQL.Async.execute("SELECT * FROM users WHERE license = @license", {["license"] = NTH.PlayerList[src_].license}, function(userData)
+function getUserCreated(source, loop)
+    MySQL.Async.execute("SELECT id, username FROM users WHERE license = @license", {["license"] = NTH.PlayerList[source].license}, function(userData)
         if userData[1] then
-            NTH.PlayerList[src_].userId = userData[1].id
-            NTH.PlayerList[src_].permissions = json.decode(userData[1].permissions)
-            if not loop then
-                print("^2[DB] User ^7"..NTH.PlayerList[src_].username.."^2 already exists ! Loading data...")
+            NTH.PlayerList[source].userId = userData[1].id
+            NTH.PlayerList[source].permissions = json.decode(userData[1].permissions)
+            if not userData[1].username == LEEDS.PlayerList[source].username then
+                MySQL.Async.execute("UPDATE users SET username = @username WHERE license = @license", {["username"] = LEEDS.PlayerList[source].username, ["license"] = LEEDS.PlayerList[source].license})
             end
-            characterSelector(src_)
+            if not loop then
+                print("^2[DB] User ^7"..NTH.PlayerList[source].username.."^2 already exists ! Loading data...")
+            end
+
+            MySQL.Async.execute("UPDATE users SET lastconnection = NOW() WHERE license = @license", {["license"] = LEEDS.PlayerList[source].license})
+
+            characterSelector(source)
         else
             if loop then
                 --Notif de bug au joueur
             elseif not loop then
-                MySQL.Async.execute("INSERT INTO users (username, license, permissions) VALUES (@username, @license, @permissions)", {["username"] = NTH.PlayerList[src_].username, ["license"] = NTH.PlayerList[src_].license, ["permissions"] = '{"characterAutorized":2}'}, function()
-                    print("^2[DB] ^1User ^7"..NTH.PlayerList[src_].username.." ^1registered ! Loading data...^7")
-                    getUserCreated(src_, true)
+                MySQL.Async.execute("INSERT INTO users (username, license, permissions) VALUES (@username, @license, @permissions)", {["username"] = NTH.PlayerList[source].username, ["license"] = NTH.PlayerList[source].license, ["permissions"] = '{"characterAutorized":2}'}, function()
+                    print("^2[DB] ^1User ^7"..NTH.PlayerList[source].username.." ^1registered ! Loading data...^7")
+                    getUserCreated(source, true)
                 end)
             end
 
@@ -72,8 +78,8 @@ function getUserCreated(src_, loop)
     end)
 end
 
-function characterSelector(src_)
-    MySQL.Async.execute("SELECT * FROM users INNER JOIN `characters` ON (users.id = `characters`.user) WHERE users.id = @id", {["id"] = NTH.PlayerList[src_].userId}, function(characterList)
+function characterSelector(source)
+    MySQL.Async.execute("SELECT * FROM users INNER JOIN `characters` ON (users.id = `characters`.user) WHERE users.id = @id", {["id"] = NTH.PlayerList[source].userId}, function(characterList)
         TriggerClientEvent('nth:sendCharacterList', src_, characterList, NTH.PlayerList[src_].permissions)
     end)
 end
