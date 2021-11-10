@@ -6,10 +6,10 @@ RegisterNetEvent('nth:playerJoined')
 AddEventHandler('nth:playerJoined', function()
     local src_ = source
     if NTH.PlayerList[src_] == nil then
-        NTH.PlayerList[src_] = {}
-        NTH.PlayerList[src_].serverId = src_
-        NTH.PlayerList[src_].username = GetPlayerName(src_)
-        NTH.PlayerList[src_].license = (string.gsub(GetPlayerIdentifiers(src_)[1], "license:", ""))
+        NTH.PlayerList[src_] = {
+            username = GetPlayerName(src_),
+            license = (string.gsub(GetPlayerIdentifiers(src_)[1], "license:", ""))
+        }
         getUserCreated(src_, false)
     end
 end)
