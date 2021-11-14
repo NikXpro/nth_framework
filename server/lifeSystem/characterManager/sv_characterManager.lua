@@ -1,4 +1,3 @@
-
 NTH = {}
 NTH.PlayerList = {}
 
@@ -15,42 +14,49 @@ AddEventHandler('nth:playerJoined', function()
 end)
 
 RegisterNetEvent('nth:editCharacter')
-AddEventHandler('nth:editCharacter', function(type, playerData)
+AddEventHandler('nth:editCharacter', function(type, charaterData)
     local src_ = source
     if type == "create" then
-        MySQL.Sync.execute("INSERT INTO `characters` (user, firstname, lastname, birthdate, size, nationality) VALUES (@user, @firstname, @lastname, @birthdate, @size, @nationality)", {
-            ["user"] = NTH.PlayerList[src_].userId,
-            ["firstname"] = playerData.pFirstname,
-            ["lastname"] = playerData.pLastname,
-            ["birthdate"] = playerData.pBirthdate,
-            ["size"] = playerData.pSize,
-            ["nationality"] = playerData.pNationality
-        })
+        if NTH.PlayerList[src_].permissions.characterAutorized > #NTH.PlayerList[src_].charList then
+            MySQL.Sync.execute("INSERT INTO `characters` (user, lastname, firstname, height, sexe, dob, pob, nationality, appearance) VALUES (@user, @lastname, @firstname, @height, @sexe, @dob, @pob, @nationality, @appearance)", {
+                ["user"] = NTH.PlayerList[src_].userId,
+                ["lastname"] = charaterData.identity.lastname,
+                ["firstname"] = charaterData.identity.firstname,
+                ["height"] = charaterData.identity.height,
+                ["sexe"] = charaterData.identity.sexe,
+                ["dob"] = charaterData.identity.dob,
+                ["pob"] = charaterData.identity.pob,
+                ["nationality"] = charaterData.identity.nationality,
+                ["appearance"] = json.encode(charaterData.face)
+            })
+            characterSelector(src_, false)
+        end
     elseif type == "select" then
-        NTH.PlayerList[src_].charId = playerData
-        TriggerClientEvent('nth:characterSelected', src_)
+        NTH.PlayerList[src_].charId = charaterData
+        local characterAppearance = MySQL.Sync.execute("SELECT appearance FROM `characters` WHERE user = @user AND id = @id", {["user"] = NTH.PlayerList[src_].userId, ["id"] = NTH.PlayerList[src_].charId})
+        TriggerClientEvent('nth:characterSelected', src_, characterAppearance[1].appearance)
     elseif type == "delete" then
-        MySQL.Sync.execute("UPDATE `characters` SET deleted = @deleted WHERE user = @user AND id = @id", {["deleted"] = 1, ["user"] = NTH.PlayerList[src_].userId, ["id"] = playerData})
-        characterSelector(src_)
+        MySQL.Sync.execute("UPDATE `characters` SET deleted = @deleted WHERE user = @user AND id = @id", {["deleted"] = 1, ["user"] = NTH.PlayerList[src_].userId, ["id"] = charaterData})
+        characterSelector(src_, false)
     end
 end)
 
 
 function getUserCreated(source, loop)
-    MySQL.Async.execute("SELECT id, username FROM users WHERE license = @license", {["license"] = NTH.PlayerList[source].license}, function(userData)
+    MySQL.Async.execute("SELECT id, username, permissions FROM users WHERE license = @license", {["license"] = NTH.PlayerList[source].license}, function(userData)
         if userData[1] then
             NTH.PlayerList[source].userId = userData[1].id
             NTH.PlayerList[source].permissions = json.decode(userData[1].permissions)
-            if not userData[1].username == LEEDS.PlayerList[source].username then
-                MySQL.Async.execute("UPDATE users SET username = @username WHERE license = @license", {["username"] = LEEDS.PlayerList[source].username, ["license"] = LEEDS.PlayerList[source].license})
+            if not userData[1].username == NTH.PlayerList[source].username then
+                MySQL.Async.execute("UPDATE users SET username = @username WHERE license = @license", {["username"] = NTH.PlayerList[source].username, ["license"] = NTH.PlayerList[source].license})
             end
             if not loop then
                 print("^2[DB] User ^7"..NTH.PlayerList[source].username.."^2 already exists ! Loading data...")
             end
 
-            MySQL.Async.execute("UPDATE users SET lastconnection = NOW() WHERE license = @license", {["license"] = LEEDS.PlayerList[source].license})
+            MySQL.Async.execute("UPDATE users SET lastconnection = NOW() WHERE license = @license", {["license"] = NTH.PlayerList[source].license})
 
-            characterSelector(source)
+            characterSelector(source, true)
         else
             if loop then
                 --Notif de bug au joueur
@@ -66,8 +72,9 @@ function getUserCreated(source, loop)
     end)
 end
 
-function characterSelector(source)
-    MySQL.Async.execute("SELECT * FROM users INNER JOIN `characters` ON (users.id = `characters`.user) WHERE users.id = @id", {["id"] = NTH.PlayerList[source].userId}, function(characterList)
-        TriggerClientEvent('nth:sendCharacterList', src_, characterList, NTH.PlayerList[src_].permissions)
+function characterSelector(source, first)
+    MySQL.Async.execute("SELECT `characters`.id, `characters`.lastname, `characters`.firstname, `characters`.appearance FROM users INNER JOIN `characters` ON (users.id = `characters`.user) WHERE users.id = @id AND `characters`.deleted = 0", {["id"] = NTH.PlayerList[source].userId}, function(characterList)
+        NTH.PlayerList[source].charList = characterList
+        TriggerClientEvent('nth:sendCharacterList', source, characterList, NTH.PlayerList[source].permissions, first)
     end)
 end

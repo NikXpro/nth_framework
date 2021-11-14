@@ -1,3 +1,5 @@
+
+
 function UpdateEntityFace(Ped, Table)
 
     if (Ped ~= nil) then
@@ -8,41 +10,40 @@ function UpdateEntityFace(Ped, Table)
     if (type(Table) == "table") then
         Table = Table
     else
-        pr("`Table` is not table")
+        print("`Table` is not table")
     end
 
     if (Table ~= nil) then
         SetPedHeadBlendData(Ped, Table.parent.mom, Table.parent.dad, 0, Table.parent.mom, Table.parent.dad, 0, Table.parent.resemblance / 10, Table.parent.skinMix / 10, 0, false)
-        --SetPedComponentVariation(Ped, 2, Table.hair.style, 0, 0)
-        --SetPedHairColor(Ped, Table.hair.color[1], Table.hair.color[2])
+        SetPedComponentVariation(Ped, 2, Table.apparence.hair.style, 0, 0)
+        SetPedHairColor(Ped, Table.apparence.hair.ColorPrimary -1, Table.apparence.hair.ColorSecondary -1)
 --
-        --SetPedHeadOverlay(Ped, 1, Table.facial.hair.beard.style, Table.facial.hair.beard.opacity)
-        --SetPedHeadOverlayColor(Ped, 1, 1, Table.facial.hair.beard.color[1], Table.facial.hair.beard.color[2])
---
---
-        --SetPedHeadOverlay(Ped, 2, Table.facial.hair.eyebrow.style, Table.facial.hair.eyebrow.opacity)
-        --SetPedHeadOverlayColor(Ped, 2, 1, Table.facial.hair.eyebrow.color[1], Table.facial.hair.eyebrow.color[2])
+        SetPedHeadOverlay(Ped, 1, Table.apparence.beard.style, Table.apparence.beard.opacity)
+        SetPedHeadOverlayColor(Ped, 1, 1, Table.apparence.beard.ColorPrimary -1, Table.apparence.beard.ColorSecondary -1)
 --
 --
-        --SetPedHeadOverlay(Ped, 3, Table.ageing.style, Table.ageing.opacity)
+        SetPedHeadOverlay(Ped, 2, Table.apparence.eyebrows.style, Table.apparence.eyebrows.opacity)
+        SetPedHeadOverlayColor(Ped, 2, 1, Table.apparence.eyebrows.ColorPrimary -1, Table.apparence.eyebrows.ColorSecondary -1)
 --
 --
-        --SetPedHeadOverlay(Ped, 8, Table.lipstick.style, Table.lipstick.opacity)
-        --SetPedHeadOverlayColor(Ped, 8, 1, Table.lipstick.color[1], Table.lipstick.color[2])
+        SetPedHeadOverlay(Ped, 3, Table.apparence.ageing.style, Table.apparence.ageing.opacity)
 --
 --
-        --SetPedHeadOverlay(Ped, 4, Table.makeup.style, Table.makeup.opacity)
---
-        --SetPedHeadOverlayColor(Ped, 4, 1, Table.makeup.color[1], Table.makeup.color[2])
---
---
-        --SetPedEyeColor(Ped, Table.eye.style)
-        --SetPedHeadOverlay(Ped, 0, Table.blemishes.style, Table.blemishes.opacity)
+        SetPedHeadOverlay(Ped, 8, Table.apparence.lipstick.style, Table.apparence.lipstick.opacity)
+        SetPedHeadOverlayColor(Ped, 8, 1, Table.apparence.lipstick.ColorPrimary - 1, Table.apparence.lipstick.ColorPrimary - 1)
 --
 --
-        --SetPedHeadOverlay(Ped, 6, Table.complexion.style, Table.complexion.opacity)
-        --SetPedHeadOverlay(Ped, 7, Table.skinAspect.style, Table.skinAspect.opacity)
-        --SetPedHeadOverlay(Ped, 9, Table.freckles.style, Table.freckles.opacity)
+        SetPedHeadOverlay(Ped, 4, Table.apparence.eyemackeup.style, Table.apparence.eyemackeup.opacity)
+        SetPedHeadOverlayColor(Ped, 4, 1, Table.apparence.eyemackeup.ColorPrimary - 1, Table.apparence.eyemackeup.ColorPrimary - 1)
+--
+--
+        SetPedEyeColor(Ped, Table.apparence.eye.style)
+        SetPedHeadOverlay(Ped, 0, Table.apparence.blemishes.style, Table.apparence.blemishes.opacity)
+--
+--
+        SetPedHeadOverlay(Ped, 6, Table.apparence.complexion.style, Table.apparence.complexion.opacity)
+        SetPedHeadOverlay(Ped, 7, Table.apparence.sundamage.style, Table.apparence.sundamage.opacity)
+        SetPedHeadOverlay(Ped, 9, Table.apparence.freckles.style, Table.apparence.freckles.opacity)
 --
 --
         --SetPedHeadOverlay(Ped, 10, Table.chestHair.style, Table.chestHair.opacity)
@@ -74,7 +75,7 @@ function UpdateEntityFace(Ped, Table)
     end
 end
 
-function updateFreemodeCharacter(entity, model, face, outfit, tattoo)
+function UpdateFreemodeCharacter(model, face, outfit, tattoo)
     RequestModel(model)
     while not HasModelLoaded(model) do
         Citizen.Wait(500)
@@ -83,4 +84,9 @@ function updateFreemodeCharacter(entity, model, face, outfit, tattoo)
     SetPedDefaultComponentVariation(PlayerPedId())
     SetEntityAsMissionEntity(PlayerPedId(), true, true)
     SetModelAsNoLongerNeeded(PlayerPedId())
+end
+
+function LoadCharacter(Model, Table)
+        UpdateFreemodeCharacter(Model, nil, nil, nil)
+        UpdateEntityFace(PlayerPedId(), Table)
 end

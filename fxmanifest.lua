@@ -44,12 +44,20 @@ client_scripts {
     'client/utils/visual.lua',
     'client/utils/keys.lua',
     'client/utils/other.lua',
+    'client/utils/string.lua',
 
     'Config.lua',
 
     'client/main.lua',
     'client/lifeSystem/characterManager/_function.lua',
     'client/lifeSystem/characterManager/cl_characterManager.lua',
+    'data/characterManager/data_apparenceList.lua',
+    'data/characterManager/data_apparenceMenu.lua',
+    'data/characterManager/data_identityMenu.lua',
+    'data/characterManager/data_nationalityList.lua',
+    'data/characterManager/data_creatorMenu.lua',
+    'data/characterManager/data_featureList.lua',
+    'data/characterManager/data_featureMenu.lua',
     'client/lifeSystem/characterManager/category/*.lua',
     'client/lifeSystem/inventory/cl_inventory.lua',
 }
@@ -57,8 +65,11 @@ client_scripts {
 server_scripts {
     'server/utils/mysql.js',
     'server/utils/mysql.lua',
+    
+    'Config.lua',
 
     'server/main.lua',
     'server/lifeSystem/characterManager/sv_characterManager.lua',
     'server/lifeSystem/inventory/sv_inventory.lua',
+    'server/lifeSystem/harvest/sv_harvest.lua',
 }

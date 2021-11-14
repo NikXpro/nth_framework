@@ -32,7 +32,7 @@ function Play.RandomAnim(playerId, animTable)
             elseif v.type == "attitude" then
                 NTH.Play.Attitude(playerId, v.lib, v.anim)
             elseif v.type == "scenario" then
-                NTH.Play.Scenario(playerId, V.anim)
+                NTH.Play.Scenario(playerId, v.anim)
             end
         end
     end
