@@ -1,14 +1,16 @@
 function createHeritageMenu()
     RageUI.IsVisible(RMenu:Get('characterManager', 'heritage'), function()
-        RageUI.Window.Heritage(NTH.Character.face.parent.mom, NTH.Character.face.parent.dad)
-        RageUI.List(GetLabelText("FACE_DADS"), Config.FatherList, NTH.Character.face.parent.dad, GetLabelText("CHARC_H_30"), {}, true, {
+        RageUI.Window.Heritage(Config.MotherList.Index, Config.FatherList.Index)
+        RageUI.List(GetLabelText("FACE_MUMS"), Config.MotherList.List, Config.MotherList.Index, GetLabelText("CHARC_H_30"), {}, true, {
             onListChange = function(Index, Item)
-                NTH.Character.face.parent.dad = Index
+                Config.MotherList.Index = Index
+                NTH.Character.face.parent.mom = Item.Value
             end
         })
-        RageUI.List(GetLabelText("FACE_MUMS"), Config.MotherList, NTH.Character.face.parent.mom, GetLabelText("CHARC_H_31"), {}, true, {
+        RageUI.List(GetLabelText("FACE_DADS"), Config.FatherList.List, Config.FatherList.Index, GetLabelText("CHARC_H_31"), {}, true, {
             onListChange = function(Index, Item)
-                NTH.Character.face.parent.mom = Index
+                Config.FatherList.Index = Index
+                NTH.Character.face.parent.dad = Item.Value
             end
         })
         RageUI.UISliderHeritage(GetLabelText("FACE_H_DOM"), NTH.Character.face.parent.resemblance, GetLabelText("CHARC_H_9"), {

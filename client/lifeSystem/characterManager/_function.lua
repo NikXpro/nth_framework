@@ -14,7 +14,7 @@ function UpdateEntityFace(Ped, Table)
     end
 
     if (Table ~= nil) then
-        SetPedHeadBlendData(Ped, Table.parent.mom, Table.parent.dad, 0, Table.parent.mom, Table.parent.dad, 0, Table.parent.resemblance / 10, Table.parent.skinMix / 10, 0, false)
+        SetPedHeadBlendData(Ped, Table.parent.mom, Table.parent.dad, nil, Table.parent.mom, Table.parent.dad, nil, Table.parent.resemblance / 10, Table.parent.skinMix / 10, nil, true)
         SetPedComponentVariation(Ped, 2, Table.apparence.hair.style, 0, 0)
         SetPedHairColor(Ped, Table.apparence.hair.ColorPrimary -1, Table.apparence.hair.ColorSecondary -1)
 --

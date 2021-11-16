@@ -12,7 +12,7 @@ function createCreatorMenu()
             end
         })
         for i = 1, #data_creatorMenu do
-            RageUI.Button(data_creatorMenu[i].Title, data_creatorMenu[i].SubTitle, {RightLabel = NTH.Emoticon.Droite}, true, {onSelected = function()end}, RMenu:Get(data_creatorMenu[i].MenuCat, data_creatorMenu[i].MenuName)) 
+            RageUI.Button(data_creatorMenu[i].Title, data_creatorMenu[i].SubTitle, {RightLabel = NTH.Emoticon.Droite}, true, {onSelected = function() EditCam(Config.camPos[data_creatorMenu[i].camPos]) end}, RMenu:Get(data_creatorMenu[i].MenuCat, data_creatorMenu[i].MenuName)) 
         end
     end)
 end
