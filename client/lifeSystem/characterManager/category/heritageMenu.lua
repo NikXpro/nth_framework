@@ -1,6 +1,6 @@
 function createHeritageMenu()
     RageUI.IsVisible(RMenu:Get('characterManager', 'heritage'), function()
-        RageUI.Window.Heritage(Config.MotherList.Index, Config.FatherList.Index)
+        RageUI.Window.Heritage(Config.MotherList.Index -1, Config.FatherList.Index -1)
         RageUI.List(GetLabelText("FACE_MUMS"), Config.MotherList.List, Config.MotherList.Index, GetLabelText("CHARC_H_30"), {}, true, {
             onListChange = function(Index, Item)
                 Config.MotherList.Index = Index
