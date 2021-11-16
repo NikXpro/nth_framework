@@ -40,6 +40,9 @@ client_scripts {
 client_scripts {
     'client/utils/_function.lua',
     'client/utils/anim.lua',
+    'client/utils/audio.lua',
+    'client/utils/callback.lua',
+    'client/utils/entity.lua',
     'client/utils/table.lua',
     'client/utils/visual.lua',
     'client/utils/keys.lua',
@@ -65,6 +68,7 @@ client_scripts {
 server_scripts {
     'server/utils/mysql.js',
     'server/utils/mysql.lua',
+    'server/utils/callback.lua',
     
     'Config.lua',
 
