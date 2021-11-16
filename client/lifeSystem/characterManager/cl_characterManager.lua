@@ -36,6 +36,7 @@ local sceneProps = {"chair01","chair02","chair03","chair04","chair05","chair06",
 
 function startCharacterScene()
     DisplayRadar(false)
+    loadIpl("bkr_biker_interior_placement_interior_6_biker_dlc_int_ware05_milo", 246785, sceneProps)
     RequestCollisionAtCoord(1158.6204833984, -3195.5803222656, -40.007972717285)
     SetEntityCoordsNoOffset(PlayerPedId(), 1158.6204833984, -3195.5803222656, -40.007972717285, false, false, false, true)
     NetworkResurrectLocalPlayer(1158.6204833984, -3195.5803222656, -40.007972717285, 86.35992431640625, true, true, false)
@@ -50,8 +51,6 @@ function startCharacterScene()
     end
     SetBlockingOfNonTemporaryEvents(PlayerPedId(), true)
     NTH.Play.RandomAnim(PlayerPedId(), Config.cmAnimList)
-    loadIpl("bkr_biker_interior_placement_interior_6_biker_dlc_int_ware05_milo", 246785, sceneProps)
-    Wait(250)
     if IsInteriorReady(246785) then
         FreezeEntityPosition(PlayerPedId(), true)
         SetEntityInvincible(PlayerPedId(), true)
