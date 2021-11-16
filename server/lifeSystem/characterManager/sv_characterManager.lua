@@ -1,5 +1,6 @@
 NTH = {}
 NTH.PlayerList = {}
+NTH.CharList = {}
 
 RegisterNetEvent('nth:playerJoined')
 AddEventHandler('nth:playerJoined', function()
@@ -30,11 +31,13 @@ AddEventHandler('nth:editCharacter', function(type, charaterData)
                 ["appearance"] = json.encode(charaterData.face)
             })
             characterSelector(src_, false)
+            
         end
     elseif type == "select" then
         NTH.PlayerList[src_].charId = charaterData
         local characterAppearance = MySQL.Sync.execute("SELECT appearance FROM `characters` WHERE user = @user AND id = @id", {["user"] = NTH.PlayerList[src_].userId, ["id"] = NTH.PlayerList[src_].charId})
         TriggerClientEvent('nth:characterSelected', src_, characterAppearance[1].appearance)
+        table.insert(NTH.CharList[NTH.PlayerList[src_].charId], src_)
     elseif type == "delete" then
         MySQL.Sync.execute("UPDATE `characters` SET deleted = @deleted WHERE user = @user AND id = @id", {["deleted"] = 1, ["user"] = NTH.PlayerList[src_].userId, ["id"] = charaterData})
         characterSelector(src_, false)
