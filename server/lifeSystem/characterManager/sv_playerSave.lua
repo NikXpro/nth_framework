@@ -20,4 +20,3 @@ function saveCharacterCoords(charId)
         ["of"] = charId
     })
 end
-

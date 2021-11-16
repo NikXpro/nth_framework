@@ -35,10 +35,20 @@ AddEventHandler('nth:editCharacter', function(type, charaterData)
         end
     elseif type == "select" then
         NTH.PlayerList[src_].charId = charaterData
-        local characterAppearance = MySQL.Sync.execute("SELECT appearance FROM `characters` WHERE user = @user AND id = @id", {["user"] = NTH.PlayerList[src_].userId, ["id"] = NTH.PlayerList[src_].charId})
+        local characterAppearance = MySQL.Sync.execute("SELECT `characters`.appearance, positions.x, positions.y, positions.z, positions.heading FROM `characters`, positions WHERE `characters`.user = @user AND `characters`.id = @id AND positions.type = 'character' AND positions.of = @id", {["user"] = NTH.PlayerList[src_].userId, ["id"] = NTH.PlayerList[src_].charId})
+        if NTH.CharList[NTH.PlayerList[src_].charId] == nil then
+            NTH.CharList[NTH.PlayerList[src_].charId] = src_
+        end
         TriggerClientEvent('nth:characterSelected', src_, characterAppearance[1].appearance)
-        table.insert(NTH.CharList[NTH.PlayerList[src_].charId], src_)
+        --print(GetPlayerPed(src_), characterAppearance[1].x, characterAppearance[1].y, characterAppearance[1].z)
+        --SetEntityCoords(GetPlayerPed(src_), tonumber(characterAppearance[1].x), tonumber(characterAppearance[1].y), tonumber(characterAppearance[1].z), false, false, false, false)
+        --SetEntityHeading(GetPlayerPed(src_), characterAppearance[1].heading)
+        --Wait(1000)
+        --print(GetPlayerPed(src_))
     elseif type == "delete" then
+        if NTH.CharList[NTH.PlayerList[src_].charId] ~= nil then
+            table.remove(NTH.CharList, NTH.PlayerList[src_].charId)
+        end
         MySQL.Sync.execute("UPDATE `characters` SET deleted = @deleted WHERE user = @user AND id = @id", {["deleted"] = 1, ["user"] = NTH.PlayerList[src_].userId, ["id"] = charaterData})
         characterSelector(src_, false)
     end

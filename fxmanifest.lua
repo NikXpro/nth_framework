@@ -66,6 +66,7 @@ client_scripts {
 }
 
 server_scripts {
+    'server/utils/_function.lua',
     'server/utils/mysql.js',
     'server/utils/mysql.lua',
     'server/utils/callback.lua',
@@ -74,6 +75,7 @@ server_scripts {
 
     'server/main.lua',
     'server/lifeSystem/characterManager/sv_characterManager.lua',
+    'server/lifeSystem/characterManager/sv_playerSave.lua',
     'server/lifeSystem/inventory/sv_inventory.lua',
     'server/lifeSystem/harvest/sv_harvest.lua',
 }

@@ -12,15 +12,16 @@ function createFeatureMenu()
     end, function()
         for i = 1, #data_featureMenu do
             if data_featureMenu[i].type == 1 then
-                RageUI.Grid(NTH.Character.face.features[data_featureMenu[i].coords[1][1]][data_featureMenu[i].coords[1][2]], NTH.Character.face.features[data_featureMenu[i].coords[2][1]][data_featureMenu[i].coords[2][2]], data_featureMenu[i].text[1], data_featureMenu[i].text[2],data_featureMenu[i].text[3], data_featureMenu[i].text[4], {
+                RageUI.Grid(NTH.Index.features[data_featureMenu[i].coords[1][1]][data_featureMenu[i].coords[1][2]], NTH.Index.features[data_featureMenu[i].coords[2][1]][data_featureMenu[i].coords[2][2]], data_featureMenu[i].text[1], data_featureMenu[i].text[2],data_featureMenu[i].text[3], data_featureMenu[i].text[4], {
                     onPositionChange = function(IndexX, IndexY, X, Y)
-                        data_featureMenu[i].panelFunction(IndexX, IndexY)
+                        
+                        data_featureMenu[i].panelFunction(X, Y, IndexX, IndexY)
                         UpdateEntityFace(PlayerPedId(), NTH.Character.face)
-                        if IndexX == 0.5 and IndexY == 0.5 then
+                        if IndexX -1 == 0.5 and IndexY-1 == 0.5 then
                             data_featureMenu[i].Index = 1
-                        elseif IndexX == 0.9 and IndexY == 0.6 then
+                        elseif IndexX-1 == 0.9 and IndexY-1 == 0.6 then
                             data_featureMenu[i].Index = 2
-                        elseif IndexX == 0.30 and IndexY == 0.70 then
+                        elseif IndexX-1 == 0.30 and IndexY-1 == 0.70 then
                             data_featureMenu[i].Index = 3
                         else
                             data_featureMenu[i].Index = 4
@@ -28,9 +29,9 @@ function createFeatureMenu()
                     end
                 }, i)
             elseif data_featureMenu[i].type == 2 then
-                RageUI.GridHorizontal(NTH.Character.face.features[data_featureMenu[i].coords[1][1]][data_featureMenu[i].coords[1][2]], data_featureMenu[i].text[1], data_featureMenu[i].text[2], {
+                RageUI.GridHorizontal(NTH.Index.features[data_featureMenu[i].coords[1][1]][data_featureMenu[i].coords[1][2]], data_featureMenu[i].text[1], data_featureMenu[i].text[2], {
                     onPositionChange = function(IndexX, IndexY, X, Y)
-                        data_featureMenu[i].panelFunction(IndexX)
+                        data_featureMenu[i].panelFunction(X, IndexX)
                         UpdateEntityFace(PlayerPedId(), NTH.Character.face)
                         if IndexX == 0.5 then
                             data_featureMenu[i].Index = 1
