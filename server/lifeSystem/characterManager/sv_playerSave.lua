@@ -20,3 +20,18 @@ function saveCharacterCoords(charId)
         ["of"] = charId
     })
 end
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if (GetCurrentResourceName() ~= resourceName) then
+      return
+    end
+    for i = 1, #NTH.CharList do
+        saveCharacterCoords(i)
+    end
+    print("Resource "..GetCurrentResourceName().. "Stoped ! All player have saved !")
+end)
+
+AddEventHandler('playerDropped', function (reason)
+    local src_ = source
+    print("Player "..GetPlayerName(src_).." disconected from this server !")
+end)

@@ -19,7 +19,8 @@ AddEventHandler('nth:editCharacter', function(type, charaterData)
     local src_ = source
     if type == "create" then
         if NTH.PlayerList[src_].permissions.characterAutorized > #NTH.PlayerList[src_].charList then
-            MySQL.Sync.execute("INSERT INTO `characters` (user, lastname, firstname, height, sexe, dob, pob, nationality, appearance) VALUES (@user, @lastname, @firstname, @height, @sexe, @dob, @pob, @nationality, @appearance)", {
+            
+            MySQL.Async.execute("INSERT INTO `characters` (user, lastname, firstname, height, sexe, dob, pob, nationality, appearance) VALUES (@user, @lastname, @firstname, @height, @sexe, @dob, @pob, @nationality, @appearance)", {
                 ["user"] = NTH.PlayerList[src_].userId,
                 ["lastname"] = charaterData.identity.lastname,
                 ["firstname"] = charaterData.identity.firstname,
@@ -29,9 +30,19 @@ AddEventHandler('nth:editCharacter', function(type, charaterData)
                 ["pob"] = charaterData.identity.pob,
                 ["nationality"] = charaterData.identity.nationality,
                 ["appearance"] = json.encode(charaterData.face)
-            })
-            characterSelector(src_, false)
-            
+
+            }, function()
+                local id = MySQL.Sync.execute("SELECT id FROM `characters` WHERE user = @user ORDER BY id DESC LIMIT 1", {["user"] = NTH.PlayerList[src_].userId})
+                MySQL.Sync.execute("INSERT INTO positions (of, type, x, y, z) VALUES (@of, @type, @x, @y, @z)", {
+                    ["of"] = id[1].id,
+                    ["type"] = "character",
+                    ["x"] = Config.spawnPoint[1],
+                    ["y"] = Config.spawnPoint[2],
+                    ["z"] = Config.spawnPoint[3],
+                    ["heading"] = Config.spawnPoint[4]
+                })
+            end)
+            characterSelector(src_, false)  
         end
     elseif type == "select" then
         NTH.PlayerList[src_].charId = charaterData
@@ -39,12 +50,10 @@ AddEventHandler('nth:editCharacter', function(type, charaterData)
         if NTH.CharList[NTH.PlayerList[src_].charId] == nil then
             NTH.CharList[NTH.PlayerList[src_].charId] = src_
         end
+        print(json.encode(characterAppearance, {indent=true}))
         TriggerClientEvent('nth:characterSelected', src_, characterAppearance[1].appearance)
-        --print(GetPlayerPed(src_), characterAppearance[1].x, characterAppearance[1].y, characterAppearance[1].z)
-        --SetEntityCoords(GetPlayerPed(src_), tonumber(characterAppearance[1].x), tonumber(characterAppearance[1].y), tonumber(characterAppearance[1].z), false, false, false, false)
-        --SetEntityHeading(GetPlayerPed(src_), characterAppearance[1].heading)
-        --Wait(1000)
-        --print(GetPlayerPed(src_))
+        SetEntityCoords(GetPlayerPed(src_), tonumber(characterAppearance[1].x), tonumber(characterAppearance[1].y), tonumber(characterAppearance[1].z), false, false, false, false)
+        SetEntityHeading(GetPlayerPed(src_), characterAppearance[1].heading)
     elseif type == "delete" then
         if NTH.CharList[NTH.PlayerList[src_].charId] ~= nil then
             table.remove(NTH.CharList, NTH.PlayerList[src_].charId)

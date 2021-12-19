@@ -2,6 +2,8 @@ Config = {}
 
 Config.ServerName = "Last Town V2"
 
+Config.spawnPoint = {100, 111, 100, 100}
+
 Config.Harvest = {
     RemainingTime = 7,
     MaxStock = 25

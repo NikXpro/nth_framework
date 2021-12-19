@@ -3,6 +3,9 @@ NTH.PlayerData = {}
 RegisterNetEvent('nth:sendCharacterList')
 AddEventHandler('nth:sendCharacterList', function(charactersList, userPermissions, first)
     NTH.PlayerData.charList = charactersList
+    for i = 1, #charactersList do
+        NTH.PlayerData.charList[i].appearance = json.decode(charactersList[i].appearance)
+    end
     NTH.PlayerData.permissions = userPermissions
     if first then
         startCharacterScene()
@@ -11,6 +14,7 @@ end)
 
 RegisterNetEvent('nth:characterSelected')
 AddEventHandler('nth:characterSelected', function(data)
+    print("test")
     local playerId = PlayerPedId()
     ClearPedTasksImmediately(playerId)
     ClearPedTasks(playerId)
@@ -141,9 +145,6 @@ function characterManagerMenu()
                 else
                     for k,v in pairs(NTH.PlayerData.charList) do
                         RageUI.Button(v.lastname.." "..v.firstname, nil, {RightLabel = NTH.Emoticon.Droite}, true, {
-                            onActivated = function()
-                                print(k)
-                            end,
                             onSelected = function()
                                 NTH.PlayerData.charSelected = v.id
                                 NTH.PlayerData.charName = v.lastname.." "..v.firstname
