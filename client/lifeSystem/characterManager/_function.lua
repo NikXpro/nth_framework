@@ -1,14 +1,15 @@
 
 
 function UpdateEntityFace(Ped, Table)
-
+        local ped = Ped
+        local table = Table
     if (Ped ~= nil) then
-        Ped = Ped
+        Ped = ped
     else
         Ped = GetPlayerPed(-1)
     end
     if (type(Table) == "table") then
-        Table = Table
+        Table = table
     else
         print("`Table` is not table")
     end
