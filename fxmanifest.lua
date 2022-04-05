@@ -63,6 +63,8 @@ client_scripts {
     'data/characterManager/data_featureMenu.lua',
     'client/lifeSystem/characterManager/category/*.lua',
     'client/lifeSystem/inventory/cl_inventory.lua',
+    'client/lifeSystem/zoneManager/cl_zoneManager.lua',
+    'client/lifeSystem/bankSystem/cl_bankSystem.lua',
 }
 
 server_scripts {
