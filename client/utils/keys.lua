@@ -1,38 +1,49 @@
 NTH.Keys = {};
 local Keys = NTH.Keys;
 
-function Keys.Register(Controls, ControlName, Description, Print, Action)
+---@param controls string
+---@param controlName string
+---@param description string
+---@param print boolean
+---@param cb function
+function Keys.Register(controls, controlName, description, print, cb)
     local _Keys = {
-        CONTROLS = Controls
+        CONTROLS = controls
     }
-    RegisterKeyMapping(string.format('+NTH-%s', ControlName), Description, "keyboard", Controls)
-    RegisterCommand(string.format('+NTH-%s', ControlName), function(source, args)
-        if (Action ~= nil) then
-            Action();
+    RegisterKeyMapping(string.format('+NTH-%s', controlName), description, "keyboard", controls)
+    RegisterCommand(string.format('+NTH-%s', controlName), function(source, args)
+        if (cb ~= nil) then
+            cb();
         end
     end, false)
     return setmetatable(_Keys, NTH.Keys)
 end
 
-function Keys.HoldRegister(Controls, ControlName, Description, Print, Action, Time)
+---@param controls string
+---@param controlName string
+---@param description string
+---@param print boolean
+---@param cb function
+---@param time number
+function Keys.HoldRegister(controls, controlName, description, print, cb, time)
     local _Keys = {
-        [ControlName] = true
+        [controlName] = true
     }
 
-    RegisterKeyMapping(string.format('+NTH-%s', ControlName), Description, "keyboard", Controls)
-    RegisterCommand(string.format('+NTH-%s', ControlName), function(source, args)
-        if (Action ~= nil) then
-            _Keys[ControlName] = true
+    RegisterKeyMapping(string.format('+NTH-%s', controlName), description, "keyboard", controls)
+    RegisterCommand(string.format('+NTH-%s', controlName), function(source, args)
+        if (cb ~= nil) then
+            _Keys[controlName] = true
             Citizen.CreateThread(function()
-                while _Keys[ControlName] do
-                    Action()
-                    Citizen.Wait(Time)
+                while _Keys[controlName] do
+                    cb()
+                    Citizen.Wait(time)
                 end
             end)
         end
     end, false)
     
-    RegisterCommand(string.format('-NTH-%s', ControlName), function(source, args)
-        _Keys[ControlName] = false
+    RegisterCommand(string.format('-NTH-%s', controlName), function(source, args)
+        _Keys[controlName] = false
     end, false)
 end

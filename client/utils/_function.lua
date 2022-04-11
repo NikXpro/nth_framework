@@ -1,5 +1,8 @@
 NTH = {}
 
+---@param TextEntry string
+---@param ExampleText string
+---@param MaxStringLenght number
 function KeyboardInput(TextEntry, ExampleText, MaxStringLenght)
 	AddTextEntry('FMMC_KEY_TIP1', TextEntry)
 	blockinput = true
@@ -19,6 +22,7 @@ function KeyboardInput(TextEntry, ExampleText, MaxStringLenght)
 	end
 end
 
+---@param txt string
 local function AddLongString(txt)
     for i = 100, string.len(txt), 99 do
         local sub = string.sub(txt, i, i + 99)
@@ -26,6 +30,8 @@ local function AddLongString(txt)
     end
 end
 
+---@param animSet string
+---@param cb function
 function NTH.RequestAnimSet(animSet, cb)
 	if not HasAnimSetLoaded(animSet) then
 		RequestAnimSet(animSet)
@@ -40,6 +46,8 @@ function NTH.RequestAnimSet(animSet, cb)
 	end
 end
 
+---@param animDict string
+---@param cb function
 function NTH.RequestAnimDict(animDict, cb)
 	if not HasAnimDictLoaded(animDict) then
 		RequestAnimDict(animDict)
@@ -54,6 +62,7 @@ function NTH.RequestAnimDict(animDict, cb)
 	end
 end
 
+---@param model string
 function NTH.LoadModel(model)
     while not HasModelLoaded(model) do
          RequestModel(model)

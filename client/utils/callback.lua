@@ -1,6 +1,9 @@
 NTH.ServerCallbacks = {}
 NTH.ClientCallbacks = {}
 
+---@param name string
+---@param cb function
+---@param data table
 NTH.TriggerCallback = function(name, cb, data)
 	local e = 'NTH-CallBackServer:'
 	local sendEvent = e..'' ..name
